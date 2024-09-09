@@ -1,85 +1,98 @@
-import ProjetoDAO from "../Persistencia/projetoDAO.js";
+import ProjetoDAO from "../Persistencia/ProjetoDAO.js";
+import Operador from "./operador.js";
+import ProjetoMaquinario from "./ProjetoMaquinario.js";
 
-export default class Projeto{
+export default class Projeto {
     #codigo;
     #operador;
-    #data;
+    #data_projeto;
     #total;
     #maquinarios;
 
-    constructor(codigo, operador, data, total, maquinario){
+    constructor(codigo, operador, data_projeto, total, maquinarios = []) {
         this.#codigo = codigo;
         this.#operador = operador;
-        this.#data = data;
+        this.#data_projeto = new Date(data_projeto);
         this.#total = total;
-        this.#maquinarios = maquinario;
-    }
-    
-    get codigo(){
-        return this.#codigo;
-}
-    set codigo(novoCodigo){
-        if (novoCodigo === "" || typeof novoCodigo !== "number"){
-            console.log("Código inválido!");
-        }
-        else{
-            this.#codigo = novoCodigo;
-        }
+        this.#maquinarios = maquinarios;
     }
 
-    get operador(){
+    get codigo() {
+        return this.#codigo;
+    }
+
+    set codigo(novoCodigo) {
+        if (novoCodigo === "" || typeof novoCodigo !== "number") {
+            throw new Error("Código inválido!");
+        }
+        this.#codigo = novoCodigo;
+    }
+
+    get operador() {
         return this.#operador;
     }
-    set operador(novoOperador){
-        this.#operador = novoOperador;
-}
 
-    get data(){
-        return this.#data;
+    set operador(novoOperador) {
+        this.#operador = novoOperador;
     }
-    set data(novaData){
-        this.#data = novaData;
+
+    get data_projeto() {
+        return this.#data_projeto;
     }
-    
-    get total(){
+
+    set data_projeto(novaData) {
+        this.#data_projeto = new Date(novaData);
+    }
+
+    get total() {
         return this.#total;
     }
-    set total(novoTotal){
+
+    set total(novoTotal) {
         this.#total = novoTotal;
     }
 
-    get maquinarios(){
+    get maquinarios() {
         return this.#maquinarios;
     }
-    set maquinarios(novoMaquinario){
-        this.#maquinarios = novoMaquinario;
+
+    set maquinarios(novosMaquinarios) {
+        this.#maquinarios = novosMaquinarios;
     }
 
-    toJSON(){
-        return{
+    adicionarMaquinario(projetoMaquinario) {
+        if (projetoMaquinario instanceof ProjetoMaquinario) {
+            this.#maquinarios.push(projetoMaquinario);
+        }
+    }
+
+    toJSON() {
+        return {
             "codigo": this.#codigo,
             "operador": this.#operador,
-            "data": this.#data,
+            "data_projeto": this.#data_projeto,
             "total": this.#total,
             "maquinarios": this.#maquinarios
         };
     }
 
-    async gravar(){
+    async gravar() {
         const projetoDAO = new ProjetoDAO();
-        this.#codigo = await projetoDAO.adicionar(this);
+        await projetoDAO.gravar(this);
     }
-    async atualizar(){
+
+    async atualizar() {
         const projetoDAO = new ProjetoDAO();
-        await projetoDAO.alterar(this);
+        await projetoDAO.atualizar(this);
     }
-    async apagar(){
+
+    async excluir() {
         const projetoDAO = new ProjetoDAO();
-        await projetoDAO.deletar(this);
+        await projetoDAO.excluir(this);
     }
+
     async consultar(termoBusca) {
         const projetoDAO = new ProjetoDAO();
-        const listaProjetos = await projetoDAO.consultar(termoBusca);
-        return listaProjetos;
+        return await projetoDAO.consultar(termoBusca);
     }
 }

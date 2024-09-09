@@ -1,6 +1,6 @@
 import Maquinario from '../Modelo/Maquinario.js';
 import TipoMaquinario from '../Modelo/TipoMaquinario.js';
-import conectar from './conexao.js';
+import conectar from './Conexao.js';
 
 export default class MaquinarioDAO {
 

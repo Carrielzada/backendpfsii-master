@@ -1,13 +1,15 @@
-import operadorDAO from '../Persistencia/operadorDAO.js';
+import OperadorDAO from '../Persistencia/OperadorDAO.js';
 
 export default class Operador{
    #codigo;
+   #cpf;
    #nome;
    #telefone;
    #endereco;
 
-constructor(codigo, nome, telefone, endereco){
+constructor(codigo, nome, cpf, telefone, endereco){
     this.#codigo = codigo;
+    this.#cpf = cpf;
     this.#nome = nome;
     this.#telefone = telefone;
     this.#endereco = endereco;
@@ -16,13 +18,21 @@ constructor(codigo, nome, telefone, endereco){
 get codigo(){
     return this.#codigo;
 }
-set codigo(novoCodigo){
-    if (novoCodigo === "" || novoCodigo === null || novoCodigo === undefined){
-        console.log("Formato de dado inválido");
+set codigo(novoCodigo) {
+    if (novoCodigo === "" || typeof novoCodigo !== "number") {
+        throw new Error("Código inválido!");
     }
-    else{
-        this.#codigo = novoCodigo;
+    this.#codigo = novoCodigo;
+}
+get cpf(){
+    return this.#cpf;
+}
+
+set cpf(novoCpf){
+    if (novoCpf === "" || typeof novoCpf !== "string"){
+        throw new Error("Formato de dado inválido");
     }
+    this.#cpf = novoCpf;
 }
 
 get nome(){
@@ -30,11 +40,9 @@ get nome(){
 }
 set nome(novoNome){
     if (novoNome === ""){
-        console.log("Dado não pode ser vazio");
+        throw new Error("Dado não pode ser vazio");
     }
-    else{
-        this.#nome = novoNome;
-    }
+    this.#nome = novoNome;
 }
 
 get telefone(){
@@ -42,11 +50,9 @@ get telefone(){
 }
 set telefone(novoTelefone){
     if (novoTelefone === "" || novoTelefone.length !== 11){
-        console.log("Formato de telefone inválido");
+        throw new Error("Formato de telefone inválido");
     }
-    else{
-        this.#telefone = novoTelefone;
-    }
+    this.#telefone = novoTelefone;
 }
 
 get endereco(){
@@ -54,17 +60,16 @@ get endereco(){
 }
 set endereco(novoEndereco){
     if (novoEndereco === ""){
-        console.log("Dado não pode ser vazio");
+        throw new Error("Dado não pode ser vazio");
     }
-    else{
-        this.#endereco = novoEndereco;
-    }
+    this.#endereco = novoEndereco;
 }
 
 toJSON(){
     return {
         codigo: this.#codigo,
         nome: this.#nome,
+        cpf: this.#cpf,
         telefone: this.#telefone,
         endereco: this.#endereco
     };
@@ -72,7 +77,7 @@ toJSON(){
 
 async gravar(){
     const operadorDAO = new OperadorDAO();
-    this.codigo = await operadorDAO.adicionar(this);
+    await operadorDAO.incluir(this);
 }
 async atualizar(){
     const operadorDAO = new OperadorDAO();
@@ -82,14 +87,13 @@ async apagar(){
     const operadorDAO = new OperadorDAO();
     await operadorDAO.apagar(this);
 }
-async consultarPorNome(nome){
+async consultar(termo){
     const operadorDAO = new OperadorDAO();
-    const listaOperadores = await operadorDAO.consultar(nome);
-    return listaOperadores;
-}
+    return await operadorDAO.consultar(termo);
+ }
 async consultarPorTelefone(telefone){
     const operadorDAO = new OperadorDAO();
-    const listaOperadores = await operadorDAO.consultar(telefone);
+    const listaOperadores = await operadorDAO.consultarPorTelefone(telefone);
     return listaOperadores;
 }
 }

@@ -5,6 +5,9 @@ import rotaMaquinario from './Rotas/rotaMaquinario.js';
 import session from 'express-session';
 import dotenv from 'dotenv';
 import rotaAutenticacao from './Rotas/rotaAutenticacao.js';
+import rotaOperador from './Rotas/rotaOperador.js';
+import rotaProjeto from './Rotas/rotaProjeto.js';
+import rotaProjetoMaquinario from './Rotas/rotaProjetoMaquinario.js';
 import { verificarAutenticacao } from './Seguranca/autenticar.js';
 dotenv.config(); // carregar as variáveis de ambiente extraindo elas do arquivo .env
 
@@ -25,9 +28,12 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
                           //middleware
-app.use('/tipoMaquinario',verificarAutenticacao,rotaTipoMaquinario);
-app.use('/maquinario',verificarAutenticacao,rotaMaquinario);
-app.use('/autenticacao',rotaAutenticacao);
+app.use('/tipoMaquinario',/* verificarAutenticacao,*/ rotaTipoMaquinario);
+app.use('/maquinario', verificarAutenticacao, rotaMaquinario);
+app.use('/autenticacao', rotaAutenticacao);
+app.use('/operador',/*verificarAutenticacao*/rotaOperador);
+app.use('/projeto',/*verificarAutenticacao*/rotaProjeto);
+app.use('/projetoMaquinario',/*verificarAutenticacao*/rotaProjetoMaquinario);
 
 app.listen(porta, host, ()=>{
     console.log(`Servidor escutando na porta ${host}:${porta}.`);
