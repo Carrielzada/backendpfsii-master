@@ -2,7 +2,7 @@ import Projeto from "../Modelo/projeto.js";
 import Operador from "../Modelo/operador.js";
 import Maquinario from "../Modelo/Maquinario.js";
 import ProjetoMaquinario from "../Modelo/ProjetoMaquinario.js";
-import conectar from "./Conexao.js";
+import conectar from "./conexao.js";
 
 export default class ProjetoDAO {
     async gravar(projeto) {

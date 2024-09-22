@@ -60,8 +60,8 @@ export default class TipoMaquinario {
         return await tpmDAO.consultar(parametro);
     }
 
-    async possuiMaquinario(){
+    async possuiMaquinario() {
         const tpmDAO = new TipoMaquinarioDAO();
-        return await tpmDAO.possuiMaquinario(this);
+        return await tpmDAO.possuiMaquinario(this.codigo); // Certifique-se de passar o código correto
     }
 }

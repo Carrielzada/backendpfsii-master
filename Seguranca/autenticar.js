@@ -9,8 +9,8 @@ export function login(req, res){
         res.status(200).json({
             "status": true,
             "mensagem": "Logado com sucesso!",
-            "token": assinar(usuario)}
-        );
+            "token": assinar(usuario) // Certifique-se de que a função assinar está retornando um token válido
+        });
     }
     else{
         res.status(401).json({

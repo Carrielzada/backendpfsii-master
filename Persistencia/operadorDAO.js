@@ -1,5 +1,5 @@
 import Operador from '../Modelo/operador.js';
-import conectar from './Conexao.js';
+import conectar from './conexao.js';
 
 export default class OperadorDAO{
 

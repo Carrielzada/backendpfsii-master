@@ -13,27 +13,34 @@ dotenv.config(); // carregar as variáveis de ambiente extraindo elas do arquivo
 
 
 const host='0.0.0.0';
-const porta=3000;
+const porta=4000;
 
 const app = express();
 
 app.use(session({
     secret: process.env.CHAVE_SECRETA,
-    resave: false, //a cada req a sessão precisa ser atualizada
+    resave: true, //a cada req a sessão precisa ser atualizada
     saveUninitialized: true, //salvar sessões não iniciadas
-    cookie: { maxAge: 1000 * 60 * 30} //tempo máximo de ociosidade para considerar a sessão vencida.
+    cookie: { 
+        httpOnly: false,
+        secure: false,
+        sameSite: false,
+        maxAge: 1000 * 60 * 30} 
 }));
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
                           //middleware
-app.use('/tipoMaquinario',/* verificarAutenticacao,*/ rotaTipoMaquinario);
-app.use('/maquinario', verificarAutenticacao, rotaMaquinario);
+app.use('/tipoMaquinario', /*verificarAutenticacao, */rotaTipoMaquinario);
+app.use('/maquinario',/* verificarAutenticacao, */rotaMaquinario);
 app.use('/autenticacao', rotaAutenticacao);
-app.use('/operador',/*verificarAutenticacao*/rotaOperador);
-app.use('/projeto',/*verificarAutenticacao*/rotaProjeto);
-app.use('/projetoMaquinario',/*verificarAutenticacao*/rotaProjetoMaquinario);
+app.use('/operador', verificarAutenticacao, rotaOperador);
+app.use('/projeto', verificarAutenticacao, rotaProjeto);
+app.use('/projetoMaquinario', verificarAutenticacao, rotaProjetoMaquinario);
 
 app.listen(porta, host, ()=>{
     console.log(`Servidor escutando na porta ${host}:${porta}.`);

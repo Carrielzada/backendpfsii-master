@@ -45,15 +45,12 @@ export default class TipoMaquinarioDAO{
         }
     }
 
-    async excluir(tipoMaquinario){
-        if (tipoMaquinario instanceof TipoMaquinario){
-            //Excluir tipo de maquinário implica em excluir também os maquinários associados
-            // caso contrario, haverá uma violação de integridade referencial no banco de dados
-            // essa restrição deve ser implementada na lógica de negócio da sua aplicação.
-            const sql = "DELETE FROM tipo_maquinario WHERE tpm_codigo = ?"; 
+    async excluir(tipoMaquinario) {
+        if (tipoMaquinario instanceof TipoMaquinario) {
+            const sql = "DELETE FROM tipo_maquinario WHERE tpm_codigo = ?";
             const parametros = [tipoMaquinario.codigo];
-            const conexao = await conectar(); //retorna uma conexão
-            await conexao.execute(sql,parametros); //prepara a sql e depois executa
+            const conexao = await conectar();
+            await conexao.execute(sql, parametros);
             global.poolConexoes.releaseConnection(conexao);
         }
     }
@@ -85,15 +82,12 @@ export default class TipoMaquinarioDAO{
         return listaTipoMaquinario;
     }
 
-    async possuiMaquinario(codigo){
-        if (tipoMaquinario instanceof TipoMaquinario){
-            const sql = `SELECT COUNT(*) AS qtd FROM maquinario m
-                         INNER JOIN tipo_maquinario t ON m.tpm_codigo = t.tpm_codigo
-                         WHERE t.tpm_codigo = ?`;
-
-            const parametros = [codigo];
-            const [registros] = await global.poolConexoes.execute(sql,parametros);
-            return registros[0].qtd > 0;
-        }
+    async possuiMaquinario(codigo) {
+        const sql = `SELECT COUNT(*) AS qtd FROM maquinario WHERE mq_tipoMaquinario = ?`; // Use mq_tipoMaquinario
+        const parametros = [codigo];
+        const conexao = await conectar();
+        const [registros] = await conexao.execute(sql, parametros);
+        global.poolConexoes.releaseConnection(conexao);
+        return registros[0].qtd > 0; // Retorna true se houver maquinários associados
     }
 }

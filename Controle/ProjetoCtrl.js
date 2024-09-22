@@ -1,3 +1,4 @@
+
 import Projeto from "../Modelo/projeto.js";
 import Operador from "../Modelo/operador.js";
 import Maquinario from "../Modelo/Maquinario.js";

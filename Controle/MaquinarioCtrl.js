@@ -99,7 +99,7 @@ export default class MaquinarioCtrl {
             if (codigo) {
                 const maquinario = new Maquinario(codigo);
                 //resolver a promise
-                maquinario.atualizar().then(() => {
+                maquinario.excluir().then(() => {
                     resposta.status(200).json({
                         "status": true,
                         "mensagem": "Maquinario excluído com sucesso!"

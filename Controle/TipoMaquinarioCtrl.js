@@ -14,6 +14,7 @@ export default class TipoMaquinarioCtrl {
                 tipoMaquinario.gravar().then(() => {
                     resposta.status(200).json({
                         "status": true,
+                        "mensagem": "Tipo de Maquinário cadastrado com sucesso!", // Mensagem de sucesso
                         "listaTipoMaquinario": [{
                             "codigo": tipoMaquinario.codigo,
                             "descricao": tipoMaquinario.descricao
@@ -23,7 +24,7 @@ export default class TipoMaquinarioCtrl {
                     .catch((erro) => {
                         resposta.status(500).json({
                             "status": false,
-                            "mensagem": "Erro ao registrar o tipo de maquinário:" + erro.message
+                            "mensagem": "Erro ao registrar o tipo de maquinário: " + erro.message
                         });
                     });
             }
@@ -83,9 +84,9 @@ export default class TipoMaquinarioCtrl {
         resposta.type('application/json');
         if (requisicao.method === 'DELETE' && requisicao.is('application/json')) {
             const dados = requisicao.body;
-            const codigo = dados.codigo;
+            const codigo = dados.codigo; // Certifique-se de que o código está sendo passado corretamente
             if (codigo) {
-                const tipoMaquinario = new TipoMaquinario(codigo);
+                const tipoMaquinario = new TipoMaquinario(codigo); // Instanciar corretamente o objeto
                 tipoMaquinario.possuiMaquinario().then(possuiMaquinario => {
                     if (!possuiMaquinario) {
                         tipoMaquinario.excluir().then(() => {
@@ -97,7 +98,7 @@ export default class TipoMaquinarioCtrl {
                         .catch((erro) => {
                             resposta.status(500).json({
                                 "status": false,
-                                "mensagem": "Erro ao excluir o tipo de maquinario:" + erro.message
+                                "mensagem": "Erro ao excluir o tipo de maquinario: " + erro.message
                             });
                         });
                     } else {
@@ -106,11 +107,10 @@ export default class TipoMaquinarioCtrl {
                             "mensagem": "Não é possível excluir o tipo de maquinario, pois existem maquinários associados!"
                         });
                     }
-                })//possui produtos
-                .catch((erro) => {
+                }).catch((erro) => {
                     resposta.status(500).json({
                         "status": false,
-                        "mensagem": "Erro ao verificar se o tipo de maquinario possui maquinários associados:" + erro.message
+                        "mensagem": "Erro ao verificar se o tipo de maquinario possui maquinários associados: " + erro.message
                     });
                 });
             } else {

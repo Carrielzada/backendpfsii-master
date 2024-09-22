@@ -1,5 +1,5 @@
 import ProjetoMaquinario from "../Modelo/ProjetoMaquinario.js";
-import conectar from "./Conexao.js";
+import conectar from "./conexao.js";
 
 export default class ProjetoMaquinarioDAO {
     async gravar(projetoMaquinario) {
